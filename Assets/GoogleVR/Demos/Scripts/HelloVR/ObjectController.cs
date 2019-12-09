@@ -116,6 +116,54 @@ namespace GoogleVR.HelloVR
             SetGazedAt(false);
         }
 
+        public void ApplyForce(BaseEventData eventData)
+        {
+            // Only trigger on left input button, which maps to
+            // Daydream controller TouchPadButton and Trigger buttons.
+            PointerEventData ped = eventData as PointerEventData;
+            if (ped != null)
+            {
+                if (ped.button != PointerEventData.InputButton.Left)
+                {
+                    return;
+                }
+            }
+
+            // Iterate over all components to get RigidBody
+            Component[] components = GetComponentsInChildren<Component>();
+            foreach (Component component in components)
+            {
+                if(component is Rigidbody)
+                {
+                    Rigidbody rb = (Rigidbody)component;
+
+                    // Calculate vector between player and object
+                    GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+                    Component[] player_components = player.GetComponentsInChildren<Component>();
+
+                    Rigidbody player_rb = null;
+
+                    foreach (Component player_component in player_components)
+                    {
+                        if (player_component is Rigidbody)
+                        {
+                            player_rb = (Rigidbody)player_component;
+                        }
+                    }
+
+                    Vector3 dir =  rb.position - player_rb.position;
+                    Vector3 unit = dir / dir.magnitude;
+                    unit.y = 0.5f;
+                    Vector3 force = unit * 250;
+                    UnityEngine.Debug.Log(force);
+                    rb.AddForceAtPosition(force, rb.position);
+                }
+            }
+            
+            
+        }
+
         private void Start()
         {
             startingPosition = transform.localPosition;

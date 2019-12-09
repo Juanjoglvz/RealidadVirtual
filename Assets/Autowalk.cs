@@ -6,7 +6,7 @@ using System.Collections;
 
 public class Autowalk : MonoBehaviour
 {
-    private const int RIGHT_ANGLE = 90;
+    private const int RIGHT_ANGLE = 120;
 
     // This variable determinates if the player will move or not 
     private bool isWalking = false;
