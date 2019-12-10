@@ -1,0 +1,105 @@
+\documentclass{pre-tfg}
+
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage{formular}
+\usepackage{mathtools}
+\usepackage[pdftex]{graphicx}
+\usepackage{rotating}
+\usepackage[utf8]{inputenx}
+\usepackage[T1]{fontenc} % Codificación de salida 
+\usepackage{marvosym}
+\showhelp  % comenta o borra para eliminar ayudas
+
+\title{Programación e interacción. Lenguaje C\# en Unity 3D, control de elementos multimedia y 3D.}
+\author{Javier Córdoba Romero y Juan José Corroto Martin}
+\advisorFirst{Javier Alonso Albusac Jiménez}
+%\advisorSecond{}
+%\intensification{(INTENSIFICACIÓN)}
+\docdate{2019}{Diciembre}
+
+
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+
+\usepackage{color}
+\definecolor{gray97}{gray}{.97}
+\definecolor{gray75}{gray}{.75}
+\definecolor{gray45}{gray}{.45}
+
+\lstset{ frame=Ltb,
+     framerule=0pt,
+     aboveskip=0.5cm,
+     framextopmargin=3pt,
+     framexbottommargin=3pt,
+     framexleftmargin=0.4cm,
+     framesep=0pt,
+     rulesep=.4pt,
+     backgroundcolor=\color{gray97},
+     rulesepcolor=\color{black},
+     %
+     stringstyle=\ttfamily,
+     showstringspaces = false,
+     basicstyle=\small\ttfamily,
+     commentstyle=\color{gray45},
+     keywordstyle=\bfseries,
+     %
+     numbers=left,
+     numbersep=15pt,
+     numberstyle=\tiny,
+     numberfirstline = false,
+     breaklines=true,
+     keepspaces=true,
+   }
+
+% minimizar fragmentado de listados
+\lstnewenvironment{listing}[1][]
+   {\lstset{#1}\pagebreak[0]}{\pagebreak[0]}
+
+\lstdefinestyle{consola}
+   {basicstyle=\scriptsize\bf\ttfamily,
+    backgroundcolor=\color{gray75},
+   }
+
+\lstdefinestyle{C}
+   {language=C,
+   }
+
+
+\renewcommand*\lstlistingname{Listado}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\newpage
+\section{Unity y C\#}
+
+La primera versión del motor de juegos Unity fue lanzada en el 2005, desde entonces mucho ha cambiado en el motor, pasando por el motor de scripting, nuevas tecnologías gráficas y el modelo de licencias.
+
+El lenguaje de scripting de Unity pasó por varias etapas, la primera de ellas fue \emph{Boo}, un lenguaje orientado a objetos usando el \emph{Common Language Runtime} (CLR) de .NET Framework, tecnología similar a la usada por \emph{Java} en su máquina virtual. La siguiente etapa pasó por usar una variante de \emph{Javascript} como lenguaje de scripting y, por último, se pasó a usar C\# como lenguaje de scripting con \emph{Visual Studio} como uno de los IDEs soportados.
+
+C\# es un lenguaje de programación orientado a objetos y ejecutado sobre el \emph{Common Language Runtime}, usando principalmente con tipos estáticos aunque con soporte para tipos dinámicos, también se puede enfocar a una programación basada en eventos gracias a sus \emph{delegados}.
+
+Ha conseguido obtener la condición de estándar ISO, su últimya revisión fue en 2018, con referencia: ISO 23270:2018\footnote{\url{https://www.iso.org/standard/75178.html}}
+
+Actualmente Unity soporta más de 20 plataformas\footnote{\url{https://unity3d.com/es/unity/features/multiplatform}}, entre las que más destacan podemos encontrar: Windows, Linux, Mac, Playstation 4, Xbox One, Nintendo 3Ds, Oculus Rift, Android, iOS, WebGL, ARKit y ARCore.
+
+C\# en Unity también permite interaccionar con los diferentes componentes del motor, como por ejemplo \emph{Mecanim}, su sistema de animación, su sistema de físicas o su sistema de componentes, lo que proporciona un control total sobre el motor y no sólo tareas de scripting in-game.
+
+\section{Uso de C\# en Unity}
+
+\section{Manejo de objetos de Unity desde C\#}
+
+\section{Ejemplos}
+
+
+
+\end{document}
+
+% Local Variables:
+% coding: utf-8
+% mode: flyspell
+% ispell-local-dictionary: "castellano8"
+% mode: latex
+% End:
