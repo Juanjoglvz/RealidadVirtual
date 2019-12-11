@@ -36,6 +36,8 @@ namespace GoogleVR.HelloVR
         private Vector3 startingPosition;
         private Renderer myRenderer;
 
+        private bool videoplaying;
+
         /// <summary>Sets this instance's GazedAt state.</summary>
         /// <param name="gazedAt">
         /// Value `true` if this object is being gazed at, `false` otherwise.
@@ -163,12 +165,44 @@ namespace GoogleVR.HelloVR
             
             
         }
+        public void StartVideo(BaseEventData eventData)
+        {
+            // Only trigger on left input button, which maps to
+            // Daydream controller TouchPadButton and Trigger buttons.
+            PointerEventData ped = eventData as PointerEventData;
+            if (ped != null)
+            {
+                if (ped.button != PointerEventData.InputButton.Left)
+                {
+                    return;
+                }
+            }
+
+
+
+            GameObject video = GameObject.FindGameObjectWithTag("Video");
+
+            var videoplayer = video.GetComponentInChildren<UnityEngine.Video.VideoPlayer>();
+
+            if (!videoplaying)
+            {
+                videoplayer.Play();
+                videoplaying = true;
+            }
+            else
+            {
+                videoplayer.Pause();
+                videoplaying = false;
+            }
+
+        }
 
         private void Start()
         {
             startingPosition = transform.localPosition;
             myRenderer = GetComponent<Renderer>();
             SetGazedAt(false);
+            videoplaying = false;
         }
     }
 }
