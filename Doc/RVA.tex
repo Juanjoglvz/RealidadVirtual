@@ -44,6 +44,23 @@ stringstyle=\color{redstrings},
 basicstyle=\ttfamily\small,
 }
 
+\usepackage[
+	backend=biber, 		% Backend
+	sorting=none,
+	defernumbers=true, 	% Para numerar al final
+	style=numeric-comp, % Estilo numérico condensado
+	% Descomentar las opciones siguientes para bibliografía multilingüe
+%	autolang=other, 	% Requerido para opción multilingüe
+%	language=auto   	% Requerido para opción multilingüe
+]{biblatex}
+
+
+% Línea añadida para eliminar el idioma de la fuente bibliográfica.
+\AtEveryBibitem{\clearfield{note} \clearlist{language}}
+% OJO: Editar si se cambia el fichero de bibliografía. 
+\addbibresource{RVA.bib} 	% Fichero de bibliografía.
+%\usepackage[autostyle]{csquotes}
+
 
 \renewcommand*\lstlistingname{Listado}
 
@@ -64,6 +81,8 @@ public class Cosa
 	}
 }
 \end{lstlisting}
+
+Citacion: \cite{Bow93}.
 
 \subsection{Programación basada en eventos}
 
@@ -87,7 +106,19 @@ C\# en Unity también permite interaccionar con los diferentes componentes del m
 
 \section{Ejemplos}
 
+\section{Conclusion}
 
+
+\section{Referencias}
+
+\clearpage
+
+%\phantomsection  % OJO: Ojo necesario con hyperref.
+\addcontentsline{toc}{chapter}{\refname} % Añade la bibliografía al Índice de contenidos.
+%---
+% Opción 1: Bibliografía con todas las fuentes en un apartado.
+%---
+\printbibliography
 
 \end{document}
 
