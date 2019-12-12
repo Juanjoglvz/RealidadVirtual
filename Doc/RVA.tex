@@ -19,50 +19,30 @@
 \docdate{2019}{Diciembre}
 
 
-\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\definecolor{bluekeywords}{rgb}{0,0,1}
+\definecolor{greencomments}{rgb}{0,0.5,0}
+\definecolor{redstrings}{rgb}{0.64,0.08,0.08}
+\definecolor{xmlcomments}{rgb}{0.5,0.5,0.5}
+\definecolor{types}{rgb}{0.17,0.57,0.68}
 
-\usepackage{color}
-\definecolor{gray97}{gray}{.97}
-\definecolor{gray75}{gray}{.75}
-\definecolor{gray45}{gray}{.45}
-
-\lstset{ frame=Ltb,
-     framerule=0pt,
-     aboveskip=0.5cm,
-     framextopmargin=3pt,
-     framexbottommargin=3pt,
-     framexleftmargin=0.4cm,
-     framesep=0pt,
-     rulesep=.4pt,
-     backgroundcolor=\color{gray97},
-     rulesepcolor=\color{black},
-     %
-     stringstyle=\ttfamily,
-     showstringspaces = false,
-     basicstyle=\small\ttfamily,
-     commentstyle=\color{gray45},
-     keywordstyle=\bfseries,
-     %
-     numbers=left,
-     numbersep=15pt,
-     numberstyle=\tiny,
-     numberfirstline = false,
-     breaklines=true,
-     keepspaces=true,
-   }
-
-% minimizar fragmentado de listados
-\lstnewenvironment{listing}[1][]
-   {\lstset{#1}\pagebreak[0]}{\pagebreak[0]}
-
-\lstdefinestyle{consola}
-   {basicstyle=\scriptsize\bf\ttfamily,
-    backgroundcolor=\color{gray75},
-   }
-
-\lstdefinestyle{C}
-   {language=C,
-   }
+\usepackage{listings}
+\lstset{language=[Sharp]C,
+captionpos=b,
+%numbers=left, %Nummerierung
+%numberstyle=\tiny, % kleine Zeilennummern
+frame=lines, % Oberhalb und unterhalb des Listings ist eine Linie
+showspaces=false,
+showtabs=false,
+breaklines=true,
+showstringspaces=false,
+breakatwhitespace=true,
+escapeinside={(*@}{@*)},
+commentstyle=\color{greencomments},
+morekeywords={partial, var, value, get, set},
+keywordstyle=\color{bluekeywords},
+stringstyle=\color{redstrings},
+basicstyle=\ttfamily\small,
+}
 
 
 \renewcommand*\lstlistingname{Listado}
@@ -74,6 +54,16 @@
 
 \newpage
 \section{C\#}
+
+\begin{lstlisting}[caption=Hello world]
+public class Cosa
+{
+	public static void main(String[] args)
+	{
+		Console.WriteLine("Hello World");
+	}
+}
+\end{lstlisting}
 
 \subsection{Programación basada en eventos}
 
