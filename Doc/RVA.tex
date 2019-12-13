@@ -64,6 +64,7 @@ basicstyle=\ttfamily\small,
 
 \renewcommand*\lstlistingname{Listado}
 
+
 \begin{document}
 
 \maketitle
@@ -86,6 +87,14 @@ Citacion: \cite{Bow93}.
 
 \subsection{Programación basada en eventos}
 
+En algún momento he dicho que los scripts son componentes
+En algún momento deberías decir que las variables públicas se pueden ver y modificar desde el editor.
+En algún momento deberías decir que es posible que los componentes tengan componentes hijos.
+En algún momento deberías hablar de los eventos más importantes de los comportamientos.
+
+
+
+
 \section{Uso de C\# en Unity}
 
 La primera versión del motor de juegos Unity fue lanzada en el 2005, desde entonces mucho ha cambiado en el motor, pasando por el motor de scripting, nuevas tecnologías gráficas y el modelo de licencias.
@@ -103,6 +112,45 @@ C\# en Unity también permite interaccionar con los diferentes componentes del m
 \subsection{Estructura de clases de Unity}
 
 \subsection{Manejo de objetos de Unity desde C\#}
+
+En esta sección se va a tratar c\'omo manipular objetos del mundo virtual desde un \textit{script} en \textit{Unity}. Como ya se ha dicho, los \textit{scripts} son componentes de los objetos. Desde cualquier \textit{script} podemos manipular cualquier otro objeto del mundo, o el mismo objeto. Esto último es especialmente f\'acil si queremos aplicar una transformación, pues tenemos acceso al componente \textit{Transform} como variable de clase. En \ref{lst:local} podemos ver como se puede acceder al componente \textit{transform} del objeto e invocar sus funciones para aplicarle una traslación. La variable \textit{transform} de ese listado no es necesario que se defina en ningún sitio del \textit{script}, sino que se tiene acceso a ella directamente. Esto es porque el componente \textit{Transform} es inherente a todos los objetos que están en la escena, puesto que todos los objetos deben de tener una transformación para saber dónde hay que dibujarlos. El resto de componentes (que deben ser añadidos manualmente), pueden ser accedidos simplemente con la función \textit{GetComponent<Tipo>()}. De esta forma podemos fácilmente aplicar transformaciones o fuerzas (en el caso de rigidBody) sobre el mismo objeto.
+
+\begin{lstlisting}[caption={Acceso al componente transform para modificar el propio objeto}, label=lst:local]
+Vector3 direction = new Vector3(mainCamera.transform.forward.x, 0, mainCamera.transform.forward.z).normalized * speed * Time.deltaTime;
+Quaternion rotation = Quaternion.Euler(new Vector3(0, -transform.rotation.eulerAngles.y, 0));
+transform.Translate(rotation * direction);
+\end{lstlisting}
+
+En el caso de querer modificar otro objeto, por ejemplo, en el caso de querer crear un enemigo a cierta distancia de otro, simplemente tenemos que encontrar la referencia al objeto. Esto se puede hacer muy fácilmente haciendo una variable pública y asignándola desde el editor. Sin embargo, si queremos acceder al objeto de forma dinámica o únicamente usando \textit{C\#}, se puede hacer de varias formas, todas usando funciones estáticas de la clase \textit{GameObject}:
+
+\begin{enumerate}
+\item Por nombre: usando la función \textit{GameObject.Find()}. Se puede buscar de forma directa un objeto en la escena virtual mediante su nombre, simplemente es necesario conocerlo de antemano. Este último matiz puede que sea la mayor inconveniencia, pues es probable que no sepamos de antemano el nombre del objeto, sobre todo si se ha generado dinámicamente. Esta función tratará los caracteres \"\/\" no como parte del nombre, sino como parte de una jerarquía de objetos. La documentación oficial de \textit{Unity} \footnote{\url{https://docs.unity3d.com/ScriptReference/GameObject.html}} desaconseja usar esta función cada frame.
+\item Por tipo: usando la función \textit{GameObject.FindObjectOfType(Type type)}. En este caso, buscamos por tipo de objeto, teniendo un ejemplo en el listado \ref{lst:tipo}.
+ Esta función retorna el \textbf{primer} objeto cargado de el tipo especificado, o \textit{null} si no existe ninguno de dicho tipo. Para conseguir un iterador de todos los objetos de ese tipo, también existe la función \textit{GameObject.FindObjectsOfType(Type type)}. La documentación oficial desaconseja utilizar estas funciones por ser más lentas que el resto.
+\item Por etiqueta o \textit{tag}: usando la función \textit{GameObject.FindGameObjectWithTag(String tag)}. Esta función, al igual que la anterior, devuelve el \textbf{primer} objeto cargado con dicha tag, o \textit{null} si no encuentra ninguno. Además, lanzará una excepción si la tag no existe. Esta función es muy fácil de usar, pues \textit{Unity} tiene un sistema nativo de tags para los objetos muy simple de usar, a parte de tener tags predefinidas. El hecho de que sean simples cadenas de caracteres también lo hace más sencillo de utilizar. 
+\end{enumerate}
+
+\begin{lstlisting}[caption=Búsqueda de objetos por tipo, label=lst:tipo]
+using UnityEngine;
+using System.Collections;
+
+// Search for any object of Type GUITexture,
+// if found print its name, else print a message
+// that says that it was not found.
+public class ExampleClass : MonoBehaviour
+{
+    void Start()
+    {
+        GUITexture texture = (GUITexture)FindObjectOfType(typeof(GUITexture));
+        if (texture)
+            Debug.Log("GUITexture object found: " + texture.name);
+        else
+            Debug.Log("No GUITexture object could be found");
+    }
+}
+\end{lstlisting}
+
+
 
 \section{Ejemplos}
 
