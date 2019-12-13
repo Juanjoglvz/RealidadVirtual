@@ -31,6 +31,7 @@ captionpos=b,
 %numbers=left, %Nummerierung
 %numberstyle=\tiny, % kleine Zeilennummern
 frame=lines, % Oberhalb und unterhalb des Listings ist eine Linie
+numbers=left,
 showspaces=false,
 showtabs=false,
 breaklines=true,
@@ -41,8 +42,9 @@ commentstyle=\color{greencomments},
 morekeywords={partial, var, value, get, set},
 keywordstyle=\color{bluekeywords},
 stringstyle=\color{redstrings},
-basicstyle=\ttfamily\small,
+basicstyle=\ttfamily\footnotesize
 }
+\renewcommand*\lstlistingname{Listado}
 
 \usepackage[
 	backend=biber, 		% Backend
@@ -58,12 +60,8 @@ basicstyle=\ttfamily\small,
 % Línea añadida para eliminar el idioma de la fuente bibliográfica.
 \AtEveryBibitem{\clearfield{note} \clearlist{language}}
 % OJO: Editar si se cambia el fichero de bibliografía. 
-\addbibresource{RVA.bib} 	% Fichero de bibliografía.
+\addbibresource{ejemplo.bib} 	% Fichero de bibliografía.
 %\usepackage[autostyle]{csquotes}
-
-
-\renewcommand*\lstlistingname{Listado}
-
 
 \begin{document}
 
@@ -73,23 +71,271 @@ basicstyle=\ttfamily\small,
 \newpage
 \section{C\#}
 
-\begin{lstlisting}[caption=Hello world]
-public class Cosa
+La sintaxis de C\# está influenciada por la de C, C++ y Java
+
+\subsection{Tipos de Variable}
+
+En C\# existen 4 categorías de variables:
+
+\begin{itemize}
+	\item Valor
+	\item Referencia
+	\item Parámetros genéricos
+	\item Punteros
+\end{itemize}
+
+\paragraph{Tipos de variables por valor}
+
+Los \texttt{structs} y la mayoría de tipos incluidos por defecto pertenecen a esta categoría, exceptuando al tipo \texttt{string}, lo mismo ocurre en Java.
+
+Un ejemplo de tipo pasado por valor está en el Listado \ref{lst:valuedtypes}, donde se ve que aunque el valor de \texttt{x} sea asignado a \texttt{y} y posteriormente el valor de \texttt{x} cambie, el valor de \texttt{y} no lo hace.
+
+\begin{spacing}{1}
+\begin{lstlisting}[float=htbp, caption=Ejemplo de tipo de variable por valor, label=lst:valuedtypes]
+static void Main()
 {
-	public static void main(String[] args)
+	int x = 4;	
+	int y = x;            // Se copia el (*@\bfseries valor@*)
+	
+	Console.WriteLine(x); // 4
+	Console.WriteLine(y); // 4
+	
+	y = 7;
+		
+	Console.WriteLine(x); // 4
+	Console.WriteLine(y); // 7
+}
+\end{lstlisting}
+\end{spacing}
+
+\paragraph{Tipos de variables por referencia}
+
+Mientras que los tipos de variables por valor están compuestos por sólo una parte, el valor, los tipos por referencia están compuestos por dos partes: un objeto y la referencia a ese objeto. El valor que se almacena en la variable es la referencia a ese objeto, el objeto se creará y almacenará independientemente de la referencia cuando se utilice el operator \texttt{new}.
+
+Un ejemplo de tipo de variable por referencia es la clase \texttt{Point2D}, que almacena el valor de un punto en el espacio 2D, el Listado \ref{lst:referencetypes} ilustra un ejemplo de el comportamiento de un tipo de variable por referencia.
+
+\begin{spacing}{1}
+\begin{lstlisting}[float=htbp, caption=Ejemplo de tipo de variable por referencia, label=lst:referencetypes]
+public class Point2D 
+{ 
+	public int x;
+	public int y;
+}
+
+static void Main()
+{
+	Point2D p1 = new Point2D();
+	p1.x = 4;
+	Point2D p2 = p1;         // Se copia la (*@\bfseries referencia@*)
+	
+	Console.WriteLine(p1.x); // 4
+	Console.WriteLine(p2.y); // 4
+	
+	p1.x = 7;
+		
+	Console.WriteLine(x);    // 7
+	Console.WriteLine(y);    -// 7
+}
+\end{lstlisting}
+\end{spacing}
+
+\subsubsection{Arrays}
+
+En C\# los arrays están completamente soportados y gestionados por el lenguaje, sin que el programador tenga que preocuparse por la gestión de la memoria o de cómo se guardan en memoria.
+
+Los arrays siempre se guardan en un bloque contiguo de memoria haciendo que los accesos a sucesivos elementos de un array sean muy eficientes.
+
+Los elementos de un array siempre se inicializarán con un valor por defecto, este valor depende del tipo de variable del array.
+
+Si el tipo de variable del array es por valor, el valor por defecto es cero en el caso de los tipos numéricos, \texttt{false} para el tipo booleano, en el caso de los structs, se inicializan con el valor predeterminado de cada elemento, como se puede ver en el Listado \ref{lst:arraytyped}.
+
+\begin{spacing}{1}
+\begin{lstlisting}[float=htbp, caption=Ejemplo de array con tipo de variable por valor, label=lst:arraytyped]
+static void Main()
+{
+	int[] x = new int[5];    // Se crea un array de 5 enteros
+	x[1] = 2;				 // Se asigna el valor 2 al segundo elemento del array
+		
+	Console.WriteLine(x[0]);    // 0
+	Console.WriteLine(x[1]);    // 2
+	Console.WriteLine(x[2]);    // 0
+	Console.WriteLine(x[3]);    // 0
+	Console.WriteLine(x[4]);    // 0
+}
+\end{lstlisting}
+\end{spacing}
+
+Sin embargo, si el tipo de variable del array es por referencia, el valor por defecto es \texttt{null} ya que , como se ha comentado anteriormente, lo que se almacena en la variable es la referencia al objeto.
+
+La consecuencia de esto es que un array de tipo de variable por referencia necesita ser inicializado después de declarar el array, como se puede observar en el Listado \ref{lst:arrayreference}.
+
+\begin{spacing}{1}
+\begin{lstlisting}[float=htbp, caption=Ejemplo de array con tipo de variable por referencia, label=lst:arrayreference]
+public class Point2D 
+{ 
+	public int x;
+	public int y;
+}
+
+static void Main()
+{
+	Point2D[] x = new Point2D[5];    // Se crea un array de 5 Point2D
+	x[1] = new Point2D();			 // Se asigna el valor 2 al segundo elemento del array
+		
+	Console.WriteLine(x[0] == null);    // true
+	Console.WriteLine(x[1] == null);    // false
+	Console.WriteLine(x[2] == null);    // true
+	Console.WriteLine(x[3] == null);    // true
+	Console.WriteLine(x[4] == null);    // true
+}
+\end{lstlisting}
+\end{spacing}
+
+\subsection{Clases}
+
+En C\#, una clase es un tipo de variable por referencia, para declarar una clase basta con escribir la palabra clave \texttt{class} seguido por el nombre de la clase y finalizando por los corchetes de apertura y cierre.
+
+Una clase puede contener uno o varios campos, estos campos son variables que pertenecen a la clase, estos campos pueden ser inicializados incluso antes de que el constructor sea ejecutado, un ejemplo de clase con un campo inicializado está en el Listado \ref{lst:fieldclass}.
+
+\begin{spacing}{1}
+\begin{lstlisting}[float=htbp, caption=Ejemplo de clase con un campo inicializado, label=lst:fieldclass]
+public class Point2D 
+{ 
+	public int x = 10;  // El valor inicial es 10
+	public int y;       // El valor inicial es el de por defecto, 0
+}
+\end{lstlisting}
+\end{spacing}
+
+Una clase también puede contener métodos, un método es una función que recibe cero o más parámetros y que puede devolver un parámetro. Un método se define de la siguiente manera:
+
+\begin{spacing}{1}
+\begin{lstlisting}[float=htbp, caption=Estructura de un método, label=lst:methoddeclaration]
+tipo-de-retorno nombre-del-metodo(lista-de-parametros)
+{
+	lista-de-sentencias
+}
+\end{lstlisting}
+\end{spacing}
+
+La definición de un método en concreto se llama \emph{firma}, pueden cooexistir dos métodos con el mismo nombre mientras no tengan la misma firma, a esto se le llama \emph{sobrecarga} de métodos.
+
+Dentro de cada clase hay un método especial, el constructor, este método es llamado justo después de crear un objeto de una clase con el operator \texttt{new} y una vez los campos de la clase se han inicializado, el constructor no tiene tipo de retorno y acepta tantos parámetros como sea necesario.
+
+Un ejemplo de clase con campos, métodos sobrecargados y un constructor está en el Listado \ref{lst:classwhole}
+
+\begin{spacing}{1}
+\begin{lstlisting}[float=htbp, caption={Ejemplo de clase con campos, sobrecarga de métodos y constructor}, label=lst:classwhole]
+public class Point2D 
+{ 
+	public int x = 10;  	// El valor inicial es 10
+	public int y;       	// El valor inicial es el de por defecto, 0
+	
+	public Point2D(int x, int y)    // Constructor de la clase
 	{
-		Console.WriteLine("Hello World");
+		this.x = x; 			    // Asignar el parametro x al campo x de la clase
+		this.y = y; 			    // Asignar el parametro y al campo y de la clase
+	}
+	
+	// Metodo que devuelve un Point2D y que acepta un Point2D	
+	public Point2D calcularVector(Point2D p)
+	{
+		int vx = p.x - this.x;
+		int vy = p.y - this.y;
+		
+		return new Point2D(vx, vy); // Devolver un nuevo Point2D
+	}
+	
+	// Metodo sobrecargado que devuelve un Point2D y que acepta dos enteros	
+	public Point2D calcularVector(int px, int py)
+	{
+		int vx = px - this.x;
+		int vy = py - this.y;
+		
+		return new Point2D(vx, vy); // Devolver un nuevo Point2D
 	}
 }
 \end{lstlisting}
+\end{spacing}
 
-Citacion: \cite{Bow93}.
+\subsubsection{Herencia}
 
-\subsection{Programación basada en eventos}
+Una clase puede heredar de otra clase para ampliar o personalizar la clase base. La ventaja de la herencia es la capacidad de reutilizar la funcionalidad de la clase base en lugar de construirla desde cero. Una clase sólo puede heredar de una clase, pero puede ser heredada por muchas clases, lo que forma una jerarquía de clases.
+
+Las referencias a una clase de una jerarquía es polimórfica. Esto significa que una variable de tipo X puede referirse a un objeto que heredó de X, como se puede ver en el Listado \ref{lst:hierarchy}, la variable \texttt{Animal} en el método \texttt{main} es polimórfica porque puede almacenar tanto una referencia a la clase \texttt{Gato} como a la clase \texttt{Pajaro}.
+
+\begin{spacing}{1}
+\begin{lstlisting}[float=htbp, caption={Ejemplo de clase con campos, sobrecarga de métodos y constructor}, label=lst:hierarchy]
+public class Animal
+{ 
+	public int numeroDePatas;
+	public bool vegetariano;
+	
+	public Animal(int nPatas, bool veget)
+	{
+		this.numeroDePatas = nPatas;
+		this.vegetariano = veget;
+	}	
+}
+
+public class Gato : Animal
+{
+	public string color;
+	
+	public Gato(int nPatas, bool veget, string color) :
+		base(nPatas, veget) // Llamar al constructor de la clase base
+	{		
+		this.color = color;
+	}	
+}
+
+public class Pajaro : Animal
+{
+	public string color;
+	public int numeroDeAlas;
+	
+	public Pajaro(int nPatas, bool veget, string color, int nAlas) :
+		base(nPatas, veget) // Llamar al constructor de la clase base
+	{		
+		this.color = color;
+		this.numeroDeAlas = nAlas;
+	}	
+}
+
+static void Main()
+{
+	Animal gato = new Gato(4, false, "blanco");        // Ejemplo de polimorfismo
+	Animal pajaro = new Pajaro(2, false, "negro", 2);  // Ejemplo de polimorfismo
+		
+	Console.WriteLine("El gato tiene " + gato.numeroDePatas + " patas");
+	Console.WriteLine("El pajaro tiene " + ((Pajaro) pajaro).numeroDeAlas + " alas");
+	Console.WriteLine("El gato es de color " + ((Gato) gato).color);
+	Console.WriteLine("El pajaro es de color " + ((Pajaro) pajaro).color);
+}
+\end{lstlisting}
+\end{spacing}
+
+\subsection{Modificadores}
+
+Los modificadores son palabras clave que acompañan a variables, clases y parámetros que modifican la forma de acceder a ellos u otras características como el tipo 
+
+\paragraph{Modificadores de variables}
+
+\paragraph{Modificadores de clases}
+
+\paragraph{Modificadores de parámetros}
+
+
+\subsection{Genericos}
+
+\subsection{Unity -- Programación basada en eventos}
 
 En algún momento he dicho que los scripts son componentes
+
 En algún momento deberías decir que las variables públicas se pueden ver y modificar desde el editor.
+
 En algún momento deberías decir que es posible que los componentes tengan componentes hijos.
+
 En algún momento deberías hablar de los eventos más importantes de los comportamientos.
 
 
@@ -103,7 +349,7 @@ El lenguaje de scripting de Unity pasó por varias etapas, la primera de ellas f
 
 C\# es un lenguaje de programación orientado a objetos y ejecutado sobre el \emph{Common Language Runtime}, usando principalmente con tipos estáticos aunque con soporte para tipos dinámicos, también se puede enfocar a una programación basada en eventos gracias a sus \emph{delegados}.
 
-Ha conseguido obtener la condición de estándar ISO, su últimya revisión fue en 2018, con referencia: ISO 23270:2018\footnote{\url{https://www.iso.org/standard/75178.html}}
+Ha conseguido obtener la condición de estándar ISO, su última revisión fue en 2018, con referencia ISO 23270:2018\footnote{\url{https://www.iso.org/standard/75178.html}}
 
 Actualmente Unity soporta más de 20 plataformas\footnote{\url{https://unity3d.com/es/unity/features/multiplatform}}, entre las que más destacan podemos encontrar: Windows, Linux, Mac, Playstation 4, Xbox One, Nintendo 3Ds, Oculus Rift, Android, iOS, WebGL, ARKit y ARCore.
 
