@@ -60,7 +60,7 @@ basicstyle=\ttfamily\footnotesize
 % Línea añadida para eliminar el idioma de la fuente bibliográfica.
 \AtEveryBibitem{\clearfield{note} \clearlist{language}}
 % OJO: Editar si se cambia el fichero de bibliografía. 
-\addbibresource{ejemplo.bib} 	% Fichero de bibliografía.
+\addbibresource{RVA.bib} 	% Fichero de bibliografía.
 %\usepackage[autostyle]{csquotes}
 
 \begin{document}
@@ -71,7 +71,11 @@ basicstyle=\ttfamily\footnotesize
 \newpage
 \section{C\#}
 
-La sintaxis de C\# está influenciada por la de C, C++ y Java
+C\# nació en el 2000 por parte de Microsoft enmarcado dentro del .NET Framework, un framework que permite reutilizar código escrito para otros lenguajes que también compilen para .NET.
+
+.NET Framework se fue expandiendo con los años hasta llegar al 2016 con el desarrollo de .NET Core, una alternativa de código abierto y usable tanto en Windows, Linux y macOS, haciendo que los programas escritos para este framework pudiesen ser ejecutados en la mayoría de sistemas operativos.
+
+C\# es un lenguaje de programación orientado a objetos con tipado fuerte y con recolector de basura ya integrado. La sintaxis de C\# está influenciada por la de C, C++ y Java.
 
 \subsection{Tipos de Variable}
 
@@ -315,20 +319,82 @@ static void Main()
 \end{lstlisting}
 \end{spacing}
 
+Respecto al uso de la herencia en Unity, la clase base en Unity es \texttt{MonoBehaviour}, es decir, todas las clases base deben heredar de ella. Como nota, en Unity se favorece la composición frente a la herencia, en parte por el sistema de componentes de Unity. Lo que significa que la herencia no es tan usada como en otros entornos de desarrollo de videojuegos.
+
 \subsection{Modificadores}
 
-Los modificadores son palabras clave que acompañan a variables, clases y parámetros que modifican la forma de acceder a ellos u otras características como el tipo 
+Los modificadores son palabras clave que acompañan a variables, clases y parámetros que modifican la forma de acceder a ellos u otras características como la forma en la que los métodos se comportan una vez son heredados, hay tres tipos principales de modificadores:
 
-\paragraph{Modificadores de variables}
+\paragraph{Modificadores de acceso}, que son los que controlan cómo y quién puede acceder a las variables, estos modificadores son:
 
-\paragraph{Modificadores de clases}
+\begin{itemize}
+	\item \texttt{public:} No hay restricciones al acceso.
+	\item \texttt{protected:} El acceso está limitado a la clase contenedora y a los tipos derivados de la clase contenedora.
+	\item \texttt{internal:} El acceso está limitado al ensamblado actual, este es el modificador por defecto si no se especifica ninguno.
+	\item \texttt{protected internal:} No hay restricciones al acceso.
+	\item \texttt{private:} No hay restricciones al acceso.
+\end{itemize}
 
-\paragraph{Modificadores de parámetros}
+El concepto de \emph{ensamblado} se asemeja al concepto de unidades de compilación de C, sin embargo, en C\#, los ensamblados también pueden contener recursos como iconos, imágenes, texto traducido...
+
+\paragraph{Modificadores de clases}, que son los que controlan las propiedades de una clase, estos modificadores son:
+\begin{itemize}
+	\item \texttt{abstract:} Indica que la clase no tiene una implementación completa y por lo tanto no se podrán crear instancias de esa clase. La implementación debe de ser completada por clases derivadas no abstractas.
+	\item \texttt{sealed:} Impide que la clase sea heredada por otras clases.
+	\item \texttt{partial:} La definición de la clase está dividida en dos o más archivos, es útil para distinguir la parte de inicialización de la UI con la de lógica.
+\end{itemize}
+
+\paragraph{Modificadores de métodos}, que son los que controlan cómo se heredan los métodos de una clase a otra, estos modificadores son:
+
+\begin{itemize}
+	\item \texttt{abstract:} Indica que el método no tiene implementación y por lo tanto no se podrán crear instancias de esa clase. La implementación debe de ser completada por clases derivadas no abstractas.
+	\item \texttt{sealed:} Impide que el método sea sobrescrito por otras clases derivadas.
+	\item \texttt{virtual:} Indica que el método modificado podrá ser sobrescrito en una clase derivada, ya que por defecto, esto no está permitido.
+	\item \texttt{override:} Permite modificar la definición de un método en una clase derivada, siempre que esto esté permitido.
+\end{itemize}
 
 
-\subsection{Genericos}
 
-\subsection{Unity -- Programación basada en eventos}
+\subsection{Delegados -- Programación basada en eventos}
+
+C\# también tiene facilidades para una programación basada en eventos, este elemento se llama \texttt{delegado}.
+
+Un delegado es un objeto que contiene una referencia a un método al que llamará cuando se le indique.
+
+Al definir un delegado también se definirá que tipo de métodos podrá llamar, un delegado se define de la siguiente manera:
+
+\begin{spacing}{1}
+\begin{lstlisting}[float=htbp, caption=Estructura de un delegado]
+delegate tipo-de-retorno nombre-del-delegado(lista-de-parametros);
+\end{lstlisting}
+\end{spacing}
+
+Para añadir un método a un delegado bastará con usar el operador de asignación (\texttt{=}).
+
+Los delegados de C\# también son multicast, es decir que un delegado no sólo almacena una única referencia a un método, si no que puede referenciar a múltiples métodos.
+
+Un ejemplo del uso de delegados está en el Listado \ref{lst:delegate}
+
+\begin{spacing}{1}
+\begin{lstlisting}[float=htbp, caption={Ejemplo de uso de delegados unicast}, label=lst:delegate]
+delegate void Saludos(string nombre);  // Declarar un delegado que no devuelve nada y que acepta un parametro string
+
+static void saludarEspanol(string nombre)
+{
+	Console.WriteLine("Hola " + nombre + "!");
+}
+
+static void Main()
+{
+	Saludos sal = saludarEspanol;  // Crear un delegado y asignarle el metodo saludarEspanol
+	sal("Javier");                 // Llamar a los metodos asignados al delegado
+}
+\end{lstlisting}
+\end{spacing}
+
+\subsubsection{Eventos en Unity}
+
+
 
 En algún momento he dicho que los scripts son componentes
 
@@ -337,7 +403,6 @@ En algún momento deberías decir que las variables públicas se pueden ver y mo
 En algún momento deberías decir que es posible que los componentes tengan componentes hijos.
 
 En algún momento deberías hablar de los eventos más importantes de los comportamientos.
-
 
 
 
@@ -361,7 +426,7 @@ C\# en Unity también permite interaccionar con los diferentes componentes del m
 
 En esta sección se va a tratar c\'omo manipular objetos del mundo virtual desde un \textit{script} en \textit{Unity}. Como ya se ha dicho, los \textit{scripts} son componentes de los objetos. Desde cualquier \textit{script} podemos manipular cualquier otro objeto del mundo, o el mismo objeto. Esto último es especialmente f\'acil si queremos aplicar una transformación, pues tenemos acceso al componente \textit{Transform} como variable de clase. En \ref{lst:local} podemos ver como se puede acceder al componente \textit{transform} del objeto e invocar sus funciones para aplicarle una traslación. La variable \textit{transform} de ese listado no es necesario que se defina en ningún sitio del \textit{script}, sino que se tiene acceso a ella directamente. Esto es porque el componente \textit{Transform} es inherente a todos los objetos que están en la escena, puesto que todos los objetos deben de tener una transformación para saber dónde hay que dibujarlos. El resto de componentes (que deben ser añadidos manualmente), pueden ser accedidos simplemente con la función \textit{GetComponent<Tipo>()}. De esta forma podemos fácilmente aplicar transformaciones o fuerzas (en el caso de rigidBody) sobre el mismo objeto.
 
-\begin{lstlisting}[caption={Acceso al componente transform para modificar el propio objeto}, label=lst:local]
+\begin{lstlisting}[float=htbp, caption={Acceso al componente transform para modificar el propio objeto}, label=lst:local]
 Vector3 direction = new Vector3(mainCamera.transform.forward.x, 0, mainCamera.transform.forward.z).normalized * speed * Time.deltaTime;
 Quaternion rotation = Quaternion.Euler(new Vector3(0, -transform.rotation.eulerAngles.y, 0));
 transform.Translate(rotation * direction);
@@ -376,7 +441,7 @@ En el caso de querer modificar otro objeto, por ejemplo, en el caso de querer cr
 \item Por etiqueta o \textit{tag}: usando la función \textit{GameObject.FindGameObjectWithTag(String tag)}. Esta función, al igual que la anterior, devuelve el \textbf{primer} objeto cargado con dicha tag, o \textit{null} si no encuentra ninguno. Además, lanzará una excepción si la tag no existe. Esta función es muy fácil de usar, pues \textit{Unity} tiene un sistema nativo de tags para los objetos muy simple de usar, a parte de tener tags predefinidas. El hecho de que sean simples cadenas de caracteres también lo hace más sencillo de utilizar. 
 \end{enumerate}
 
-\begin{lstlisting}[caption=Búsqueda de objetos por tipo, label=lst:tipo]
+\begin{lstlisting}[float=htbp, caption=Búsqueda de objetos por tipo, label=lst:tipo]
 using UnityEngine;
 using System.Collections;
 
@@ -403,6 +468,7 @@ public class ExampleClass : MonoBehaviour
 \section{Conclusion}
 
 
+
 \section{Referencias}
 
 \clearpage
@@ -412,6 +478,8 @@ public class ExampleClass : MonoBehaviour
 %---
 % Opción 1: Bibliografía con todas las fuentes en un apartado.
 %---
+
+\nocite{*}
 \printbibliography
 
 \end{document}
