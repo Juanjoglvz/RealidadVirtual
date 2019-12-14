@@ -432,11 +432,12 @@ Vector3 direction = new Vector3(mainCamera.transform.forward.x, 0, mainCamera.tr
 Quaternion rotation = Quaternion.Euler(new Vector3(0, -transform.rotation.eulerAngles.y, 0));
 transform.Translate(rotation * direction);
 \end{lstlisting}
+\end{spacing}
 
 En el caso de querer modificar otro objeto, por ejemplo, en el caso de querer crear un enemigo a cierta distancia de otro, simplemente tenemos que encontrar la referencia al objeto. Esto se puede hacer muy fácilmente haciendo una variable pública y asignándola desde el editor. Sin embargo, si queremos acceder al objeto de forma dinámica o únicamente usando \textit{C\#}, se puede hacer de varias formas, todas usando funciones estáticas de la clase \textit{GameObject}:
 
 \begin{enumerate}
-\item Por nombre: usando la función \textit{GameObject.Find()}. Se puede buscar de forma directa un objeto en la escena virtual mediante su nombre, simplemente es necesario conocerlo de antemano. Este último matiz puede que sea la mayor inconveniencia, pues es probable que no sepamos de antemano el nombre del objeto, sobre todo si se ha generado dinámicamente. Esta función tratará los caracteres \"\/\" no como parte del nombre, sino como parte de una jerarquía de objetos. La documentación oficial de \textit{Unity} \footnote{\url{https://docs.unity3d.com/ScriptReference/GameObject.html}} desaconseja usar esta función cada frame.
+\item Por nombre: usando la función \textit{GameObject.Find()}. Se puede buscar de forma directa un objeto en la escena virtual mediante su nombre, simplemente es necesario conocerlo de antemano. Este último matiz puede que sea la mayor inconveniencia, pues es probable que no sepamos de antemano el nombre del objeto, sobre todo si se ha generado dinámicamente. Esta función tratará los caracteres \"\/\" no como parte del nombre, sino como parte de una jerarquía de objetos. La documentación oficial de \textit{Unity} \footnote{\url{https://docs.unity3d.com/ScriptReference/GameObject.html}} \cite{unityreference} desaconseja usar esta función cada frame.
 \item Por tipo: usando la función \textit{GameObject.FindObjectOfType(Type type)}. En este caso, buscamos por tipo de objeto, teniendo un ejemplo en el listado \ref{lst:tipo}.
  Esta función retorna el \textbf{primer} objeto cargado de el tipo especificado, o \textit{null} si no existe ninguno de dicho tipo. Para conseguir un iterador de todos los objetos de ese tipo, también existe la función \textit{GameObject.FindObjectsOfType(Type type)}. La documentación oficial desaconseja utilizar estas funciones por ser más lentas que el resto.
 \item Por etiqueta o \textit{tag}: usando la función \textit{GameObject.FindGameObjectWithTag(String tag)}. Esta función, al igual que la anterior, devuelve el \textbf{primer} objeto cargado con dicha tag, o \textit{null} si no encuentra ninguno. Además, lanzará una excepción si la tag no existe. Esta función es muy fácil de usar, pues \textit{Unity} tiene un sistema nativo de tags para los objetos muy simple de usar, a parte de tener tags predefinidas. El hecho de que sean simples cadenas de caracteres también lo hace más sencillo de utilizar. 
@@ -462,12 +463,109 @@ public class ExampleClass : MonoBehaviour
     }
 }
 \end{lstlisting}
+\end{spacing}
 
 Una vez hemos conseguido la referencia al objeto, podemos modificar cualquiera de sus cualidades accediendo a sus componentes, de la misma forma que se explicó anteriormente con el objeto al que pertenece el \textit{script}. 
 
 De forma similar se pueden controlar contenidos multimedia, como sonidos o vídeos. En Unity estos contenidos también son componentes. Se pueden modificar fácilmente usando el mismo proceso descrito anteriormente. Simplemente hay que encontrar la referencia al componente de sonido o vídeo y utilizar las funciones disponibles por parte de dicho componente.
 
+Todo lo descrito anteriormente es igual de válido para desarrollar en realidad virtual. En \textit{Unity} no es necesario modificar ningún punto del desarrollo de la escena, por lo que la forma de modificar objetos 3D o multimedia es la misma. La única diferencia es el componente del controlador del jugador, que tendrá que tener la lógica asociada al control con el \textit{hardware} de realidad virtual.
+
 \section{Ejemplos}
+
+Para terminar y concretar el trabajo, hemos realizado varios \textit{scripts} sencillos que demuestran de forma práctica cómo modificar elementos del juego mediante el lenguaje \textit{C\#}. Se ha usado el escenario de ejemplo que incluye el \textit{plugin} de realidad virtual de Google (el cuál usamos para poder ejecutar el juego en el móvil) \ref{fig:Escena1}. Dentro de este escenario se han desarrollado 3 \textit{scripts}:
+
+\begin{enumerate}
+\item Movimiento automático del jugador, para poder desplazarse por el escenario sin pulsar botones.
+\item Aplicación de fueras a un objeto con físicas.
+\item Reproducción de un vídeo interactuando con un objeto del escenario.
+\end{enumerate}
+
+La parte más interesante del primer \textit{script} se puede ver en el listado \ref{lst:autowalk}. Cada frame, el \textit{script} calcula si el jugador debería moverse o no. Hemos decidido controlarlo mediante el ángulo de visión. Si el jugador baja la vista por debajo de un cierto ángulo, empezará a moverse hasta que suba la vista por encima de otro ángulo. Todos los parámetros pueden ser elegidos desde el editor.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[scale=0.4]{Escena1.jpg}
+	\caption{Escena para los ejemplos.}
+	\label{fig:Escena1}
+\end{figure}
+
+\begin{spacing}{1}
+\begin{lstlisting}[float=htbp, caption=Translación y rotación del jugador en el movimiento automático, label=lst:autowalk]
+if (isWalking)
+        {
+            Vector3 direction = new Vector3(mainCamera.transform.forward.x, 0, mainCamera.transform.forward.z).normalized * speed * Time.deltaTime;
+            Quaternion rotation = Quaternion.Euler(new Vector3(0, -transform.rotation.eulerAngles.y, 0));
+            transform.Translate(rotation * direction);
+        }
+\end{lstlisting}
+\end{spacing}
+
+
+El segundo \textit{script} \ref{lst:applyForce} consiste en una función que se ejecutará cuando el jugador interactúe con la figura 3D que se puede ver en la figura \ref{fig:Escena1}. Para ello, encontramos el componente \textit{RigidBody}, que es el que nos dejará aplicar una fuerza en los 3 ejes, iterando sobre todos los componentes del objeto. También buscamos la referencia al jugador mediante la función discutida anteriormente \textit{GameObject.FindGameObjectWithTag("Player")}, usando como tag "Player". Obtenemos el componente \textit{RigidBody} del jugador para poder calcular el vector entre los dos objetos, y aplicamos una fuerza en esa dirección, aunque en el eje Y (el que apunta hacia "arriba") se cambia para que la fuerza sea siempre en sentido ascendente. Este ejemplo muestra muy bien cómo se pueden obtener componentes y otros objetos mediante el uso de un par de funciones.
+
+\begin{spacing}{1}
+\begin{lstlisting}[float=htbp, caption=Aplicación de una fuerza a un objeto con físicas, label=lst:applyForce]
+// Iterate over all components to get RigidBody
+Component[] components = GetComponentsInChildren<Component>();
+foreach (Component component in components)
+{
+	if(component is Rigidbody)
+	{
+		Rigidbody rb = (Rigidbody)component;
+
+		// Calculate vector between player and object
+		GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+		Component[] player_components = player.GetComponentsInChildren<Component>();
+
+		Rigidbody player_rb = null;
+
+		foreach (Component player_component in player_components)
+		{
+			if (player_component is Rigidbody)
+			{
+				player_rb = (Rigidbody)player_component;
+			}
+		}
+
+		Vector3 dir =  rb.position - player_rb.position;\\
+		Vector3 unit = dir / dir.magnitude;
+		unit.y = 0.5f;
+		Vector3 force = unit * 250;
+		rb.AddForceAtPosition(force, rb.position);
+	}
+}
+\end{lstlisting}
+\end{spacing}
+
+El último \textit{script} consiste en la reproducción y pausa de un vídeo interactuando con otro objeto dentro de la escena. En la figura \ref{fig:Escena2} se pueden ver el objeto con el que hay que interactuar y el plano donde se puede visualizar el vídeo. Este último tiene un componente \textit{VideoPlayer} que es el que se encarga de reproducir el vídeo como si fuera una textura dinámica del plano. En el listado \ref{lst:PlayVideo} se puede ver cómo el proceso es prácticamente el mismo: Encontramos el objeto dentro de la escena y obtenemos el componente deseado. En este ejemplo aparece cómo encontrar un componente en concreto sin necesidad de usar un iterador, símplemente estableciendo el tipo específico de componente en la función \textit{GetComponentInChildren()}. Sin embargo, esto sólo funcionará con los componentes de tipos ya definidos en \textit{Unity} (no con otros \textit{scripts}). 
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[scale=0.4]{Escena2.jpg}
+	\caption{Escena para los ejemplos, segunda perspectiva.}
+	\label{fig:Escena2}
+\end{figure}
+
+\begin{spacing}{1}
+\begin{lstlisting}[float=htbp, caption=Inicio y pausa del vídeo desde el objeto con el que se interactúa, label=lst:PlayVideo]
+GameObject video = GameObject.FindGameObjectWithTag("Video");
+
+var videoplayer = video.GetComponentInChildren<UnityEngine.Video.VideoPlayer>();
+
+if (!videoplaying)
+{
+	videoplayer.Play();
+	videoplaying = true;
+}
+else
+{
+	videoplayer.Pause();
+	videoplaying = false;
+}
+\end{lstlisting}
+\end{spacing}
 
 \section{Conclusion}
 

@@ -158,7 +158,6 @@ namespace GoogleVR.HelloVR
                     Vector3 unit = dir / dir.magnitude;
                     unit.y = 0.5f;
                     Vector3 force = unit * 250;
-                    UnityEngine.Debug.Log(force);
                     rb.AddForceAtPosition(force, rb.position);
                 }
             }
