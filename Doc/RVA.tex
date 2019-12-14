@@ -426,6 +426,7 @@ C\# en Unity también permite interaccionar con los diferentes componentes del m
 
 En esta sección se va a tratar c\'omo manipular objetos del mundo virtual desde un \textit{script} en \textit{Unity}. Como ya se ha dicho, los \textit{scripts} son componentes de los objetos. Desde cualquier \textit{script} podemos manipular cualquier otro objeto del mundo, o el mismo objeto. Esto último es especialmente f\'acil si queremos aplicar una transformación, pues tenemos acceso al componente \textit{Transform} como variable de clase. En \ref{lst:local} podemos ver como se puede acceder al componente \textit{transform} del objeto e invocar sus funciones para aplicarle una traslación. La variable \textit{transform} de ese listado no es necesario que se defina en ningún sitio del \textit{script}, sino que se tiene acceso a ella directamente. Esto es porque el componente \textit{Transform} es inherente a todos los objetos que están en la escena, puesto que todos los objetos deben de tener una transformación para saber dónde hay que dibujarlos. El resto de componentes (que deben ser añadidos manualmente), pueden ser accedidos simplemente con la función \textit{GetComponent<Tipo>()}. De esta forma podemos fácilmente aplicar transformaciones o fuerzas (en el caso de rigidBody) sobre el mismo objeto.
 
+\begin{spacing}{1}
 \begin{lstlisting}[float=htbp, caption={Acceso al componente transform para modificar el propio objeto}, label=lst:local]
 Vector3 direction = new Vector3(mainCamera.transform.forward.x, 0, mainCamera.transform.forward.z).normalized * speed * Time.deltaTime;
 Quaternion rotation = Quaternion.Euler(new Vector3(0, -transform.rotation.eulerAngles.y, 0));
@@ -441,6 +442,7 @@ En el caso de querer modificar otro objeto, por ejemplo, en el caso de querer cr
 \item Por etiqueta o \textit{tag}: usando la función \textit{GameObject.FindGameObjectWithTag(String tag)}. Esta función, al igual que la anterior, devuelve el \textbf{primer} objeto cargado con dicha tag, o \textit{null} si no encuentra ninguno. Además, lanzará una excepción si la tag no existe. Esta función es muy fácil de usar, pues \textit{Unity} tiene un sistema nativo de tags para los objetos muy simple de usar, a parte de tener tags predefinidas. El hecho de que sean simples cadenas de caracteres también lo hace más sencillo de utilizar. 
 \end{enumerate}
 
+\begin{spacing}{1}
 \begin{lstlisting}[float=htbp, caption=Búsqueda de objetos por tipo, label=lst:tipo]
 using UnityEngine;
 using System.Collections;
@@ -461,7 +463,9 @@ public class ExampleClass : MonoBehaviour
 }
 \end{lstlisting}
 
+Una vez hemos conseguido la referencia al objeto, podemos modificar cualquiera de sus cualidades accediendo a sus componentes, de la misma forma que se explicó anteriormente con el objeto al que pertenece el \textit{script}. 
 
+De forma similar se pueden controlar contenidos multimedia, como sonidos o vídeos. En Unity estos contenidos también son componentes. Se pueden modificar fácilmente usando el mismo proceso descrito anteriormente. Simplemente hay que encontrar la referencia al componente de sonido o vídeo y utilizar las funciones disponibles por parte de dicho componente.
 
 \section{Ejemplos}
 
