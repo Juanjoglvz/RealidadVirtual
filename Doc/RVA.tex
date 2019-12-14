@@ -96,7 +96,7 @@ Un ejemplo de tipo pasado por valor está en el Listado \ref{lst:valuedtypes}, d
 
 \begin{spacing}{1}
 \begin{lstlisting}[float=htbp, caption=Ejemplo de tipo de variable por valor, label=lst:valuedtypes]
-static void Main()
+public static void Main()
 {
 	int x = 4;	
 	int y = x;            // Se copia el (*@\bfseries valor@*)
@@ -126,7 +126,7 @@ public class Point2D
 	public int y;
 }
 
-static void Main()
+public static void Main()
 {
 	Point2D p1 = new Point2D();
 	p1.x = 4;
@@ -155,7 +155,7 @@ Si el tipo de variable del array es por valor, el valor por defecto es cero en e
 
 \begin{spacing}{1}
 \begin{lstlisting}[float=htbp, caption=Ejemplo de array con tipo de variable por valor, label=lst:arraytyped]
-static void Main()
+public static void Main()
 {
 	int[] x = new int[5];    // Se crea un array de 5 enteros
 	x[1] = 2;				 // Se asigna el valor 2 al segundo elemento del array
@@ -181,7 +181,7 @@ public class Point2D
 	public int y;
 }
 
-static void Main()
+public static void Main()
 {
 	Point2D[] x = new Point2D[5];    // Se crea un array de 5 Point2D
 	x[1] = new Point2D();			 // Se asigna el valor 2 al segundo elemento del array
@@ -273,12 +273,10 @@ Las referencias a una clase de una jerarquía es polimórfica. Esto significa qu
 public class Animal
 { 
 	public int numeroDePatas;
-	public bool vegetariano;
 	
-	public Animal(int nPatas, bool veget)
+	public Animal(int nPatas)
 	{
 		this.numeroDePatas = nPatas;
-		this.vegetariano = veget;
 	}	
 }
 
@@ -286,8 +284,8 @@ public class Gato : Animal
 {
 	public string color;
 	
-	public Gato(int nPatas, bool veget, string color) :
-		base(nPatas, veget) // Llamar al constructor de la clase base
+	public Gato(int nPatas, string color) :
+		base(nPatas) // Llamar al constructor de la clase base
 	{		
 		this.color = color;
 	}	
@@ -298,18 +296,18 @@ public class Pajaro : Animal
 	public string color;
 	public int numeroDeAlas;
 	
-	public Pajaro(int nPatas, bool veget, string color, int nAlas) :
-		base(nPatas, veget) // Llamar al constructor de la clase base
+	public Pajaro(int nPatas, string color, int nAlas) :
+		base(nPatas) // Llamar al constructor de la clase base
 	{		
 		this.color = color;
 		this.numeroDeAlas = nAlas;
 	}	
 }
 
-static void Main()
+public static void Main()
 {
-	Animal gato = new Gato(4, false, "blanco");        // Ejemplo de polimorfismo
-	Animal pajaro = new Pajaro(2, false, "negro", 2);  // Ejemplo de polimorfismo
+	Animal gato = new Gato(4, "blanco");        // Ejemplo de polimorfismo
+	Animal pajaro = new Pajaro(2, "negro", 2);  // Ejemplo de polimorfismo
 		
 	Console.WriteLine("El gato tiene " + gato.numeroDePatas + " patas");
 	Console.WriteLine("El pajaro tiene " + ((Pajaro) pajaro).numeroDeAlas + " alas");
@@ -384,7 +382,7 @@ static void saludarEspanol(string nombre)
 	Console.WriteLine("Hola " + nombre + "!");
 }
 
-static void Main()
+public static void Main()
 {
 	Saludos sal = saludarEspanol;  // Crear un delegado y asignarle el metodo saludarEspanol
 	sal("Javier");                 // Llamar a los metodos asignados al delegado
@@ -567,11 +565,13 @@ else
 \end{lstlisting}
 \end{spacing}
 
-\section{Conclusion}
+\section{Conclusión}
 
+La conclusión de este estudio es que Unity es muy flexible tanto en la interacción como en la inclusión de elementos multimedia. 
 
+Algunas de las facilidades que Unity provee para la interacción es la inclusión por defecto de los eventos más usados en el desarrollo de juegos.
 
-\section{Referencias}
+Respecto a las facilidades con los elementos multimedia destaca el amplio soporte a formatos tanto de audio como de video y la manera unificada de controlar estos aspectos, sin que sea necesario tener en cuenta el formato del elemento.
 
 \clearpage
 
