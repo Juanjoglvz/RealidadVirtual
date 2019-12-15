@@ -392,17 +392,27 @@ public static void Main()
 
 \subsubsection{Eventos en Unity}
 
+Todos los objetos en un mundo de Unity contienen uno o varios componentes, esto aporta mucha flexibilidad ya que se puede reutilizar el manejador de colisiones de un personaje en otro sin tener que modificar el código.
 
+Los componentes son tan diversos como colisionadores, \emph{rigidbodies}, que permiten que los colisiones interactúen con el motor de físicas, un animador o un sistema de partículas.
 
-En algún momento he dicho que los scripts son componentes
+Dentro de estos componentes, los scripts que se programan en C\# también son componentes lo que aumenta la flexibilidad del código escrito.
 
-En algún momento deberías decir que las variables públicas se pueden ver y modificar desde el editor.
+Dentro de estos scripts tenemos \emph{eventos} en forma de métodos que Unity llamará cuando suceda algún evento, estos eventos son:
 
-En algún momento deberías decir que es posible que los componentes tengan componentes hijos.
+\begin{itemize}
+	\item \texttt{Awake():} Este evento es llamado una sola vez cuando el script es cargado, \textbf{aunque el script no esté activado}
+	\item \texttt{Start():} Este evento podrá ser llamado múltiples veces cuando el script se active.
+	\item \texttt{Start():} Este evento es llamado una sola vez cuando el script es cargado y \textbf{activado}
+	\item \texttt{FixedUpdate():} Llamado antes de que el motor de físicas vuelva a recalcular las físicas del mundo, llamado con la frecuencia del sistema de físicas e independientemente del \emph{frame-rate}, útil para aplicar fuerzas para que están sean lo más precisas posible.
+	\item \texttt{Update():} Llamado cada \emph{frame}, útil para implementar lógica del juego.
+	\item \texttt{LateUpdate():} Llamado cada \emph{frame}, después de que todas las funciones \texttt{Update} sean ejecutadas, útil cuando se debe realizar alguna operación dependiente en el movimiento realizado en \texttt{Update}.
+	\item \texttt{OnGUI():} Usado para implementar la interfaz de usuario, puede ser llamado múltiples veces en un solo frame si hay varios eventos que procesar.
+	\item \texttt{OnApplicationPause():} Llamado cada vez que el juego se pone en pausa.
+\end{itemize}
 
-En algún momento deberías hablar de los eventos más importantes de los comportamientos.
-
-
+Otro problema resuelto por Unity es el siguiente supuesto. \\
+A la hora de modificar los parámetros de los \emph{scripts} consumiría mucho tiempo ya que habría que abrir el \emph{script} en el editor de código y buscar el parámetro a modificar de entre todas las variables declaradas, Unity, para hacer más sencillo este proceso, hace que todas las variables públicas de un \emph{script} aparezcan en el inspector de componentes, lo que simplifica este proceso y hace que pueda ser realizado por gente sin conocimientos técnicos.
 
 \section{Uso de C\# en Unity}
 
