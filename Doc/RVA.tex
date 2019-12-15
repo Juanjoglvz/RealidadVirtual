@@ -138,7 +138,7 @@ public static void Main()
 	p1.x = 7;
 		
 	Console.WriteLine(x);    // 7
-	Console.WriteLine(y);    -// 7
+	Console.WriteLine(y);    // 7
 }
 \end{lstlisting}
 \end{spacing}
@@ -158,7 +158,7 @@ Si el tipo de variable del array es por valor, el valor por defecto es cero en e
 public static void Main()
 {
 	int[] x = new int[5];    // Se crea un array de 5 enteros
-	x[1] = 2;				 // Se asigna el valor 2 al segundo elemento del array
+	x[1] = 2;                // Se asigna el valor 2 al segundo elemento del array
 		
 	Console.WriteLine(x[0]);    // 0
 	Console.WriteLine(x[1]);    // 2
@@ -184,7 +184,7 @@ public class Point2D
 public static void Main()
 {
 	Point2D[] x = new Point2D[5];    // Se crea un array de 5 Point2D
-	x[1] = new Point2D();			 // Se asigna el valor 2 al segundo elemento del array
+	x[1] = new Point2D();            // Se asigna un valor al segundo elemento del array
 		
 	Console.WriteLine(x[0] == null);    // true
 	Console.WriteLine(x[1] == null);    // false
@@ -232,13 +232,13 @@ Un ejemplo de clase con campos, métodos sobrecargados y un constructor está en
 \begin{lstlisting}[float=htbp, caption={Ejemplo de clase con campos, sobrecarga de métodos y constructor}, label=lst:classwhole]
 public class Point2D 
 { 
-	public int x = 10;  	// El valor inicial es 10
-	public int y;       	// El valor inicial es el de por defecto, 0
+	public int x = 10;  // El valor inicial es 10
+	public int y;       // El valor inicial es el de por defecto, 0
 	
 	public Point2D(int x, int y)    // Constructor de la clase
 	{
-		this.x = x; 			    // Asignar el parametro x al campo x de la clase
-		this.y = y; 			    // Asignar el parametro y al campo y de la clase
+		this.x = x;  // Asignar el parametro x al campo x de la clase
+		this.y = y;  // Asignar el parametro y al campo y de la clase
 	}
 	
 	// Metodo que devuelve un Point2D y que acepta un Point2D	
@@ -402,7 +402,7 @@ Dentro de estos scripts tenemos \emph{eventos} en forma de métodos que Unity ll
 
 \begin{itemize}
 	\item \texttt{Awake():} Este evento es llamado una sola vez cuando el script es cargado, \textbf{aunque el script no esté activado}
-	\item \texttt{Start():} Este evento podrá ser llamado múltiples veces cuando el script se active.
+	\item \texttt{OnEnable():} Este evento podrá ser llamado múltiples veces cuando el script se active.
 	\item \texttt{Start():} Este evento es llamado una sola vez cuando el script es cargado y \textbf{activado}
 	\item \texttt{FixedUpdate():} Llamado antes de que el motor de físicas vuelva a recalcular las físicas del mundo, llamado con la frecuencia del sistema de físicas e independientemente del \emph{frame-rate}, útil para aplicar fuerzas para que están sean lo más precisas posible.
 	\item \texttt{Update():} Llamado cada \emph{frame}, útil para implementar lógica del juego.
