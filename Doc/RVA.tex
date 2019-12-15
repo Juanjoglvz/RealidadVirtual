@@ -428,11 +428,9 @@ Actualmente Unity soporta más de 20 plataformas\footnote{\url{https://unity3d.c
 
 C\# en Unity también permite interaccionar con los diferentes componentes del motor, como por ejemplo \emph{Mecanim}, su sistema de animación, su sistema de físicas o su sistema de componentes, lo que proporciona un control total sobre el motor y no sólo tareas de scripting in-game.
 
-\subsection{Estructura de clases de Unity}
-
 \subsection{Manejo de objetos de Unity desde C\#}
 
-En esta sección se va a tratar c\'omo manipular objetos del mundo virtual desde un \textit{script} en \textit{Unity}. Como ya se ha dicho, los \textit{scripts} son componentes de los objetos. Desde cualquier \textit{script} podemos manipular cualquier otro objeto del mundo, o el mismo objeto. Esto último es especialmente f\'acil si queremos aplicar una transformación, pues tenemos acceso al componente \textit{Transform} como variable de clase. En \ref{lst:local} podemos ver como se puede acceder al componente \textit{transform} del objeto e invocar sus funciones para aplicarle una traslación. La variable \textit{transform} de ese listado no es necesario que se defina en ningún sitio del \textit{script}, sino que se tiene acceso a ella directamente. Esto es porque el componente \textit{Transform} es inherente a todos los objetos que están en la escena, puesto que todos los objetos deben de tener una transformación para saber dónde hay que dibujarlos. El resto de componentes (que deben ser añadidos manualmente), pueden ser accedidos simplemente con la función \textit{GetComponent<Tipo>()}. De esta forma podemos fácilmente aplicar transformaciones o fuerzas (en el caso de rigidBody) sobre el mismo objeto.
+En esta sección se va a tratar c\'omo manipular objetos del mundo virtual desde un \textit{script} en \textit{Unity}. Como ya se ha dicho, los \textit{scripts} son componentes de los objetos. Desde cualquier \textit{script} podemos manipular cualquier otro objeto del mundo, o el mismo objeto. Esto último es especialmente f\'acil si queremos aplicar una transformación, pues tenemos acceso al componente \textit{Transform} como variable de clase. En [\ref{lst:local}] podemos ver como se puede acceder al componente \textit{transform} del objeto e invocar sus funciones para aplicarle una traslación. La variable \textit{transform} de ese listado no es necesario que se defina en ningún sitio del \textit{script}, sino que se tiene acceso a ella directamente. Esto es porque el componente \textit{Transform} es inherente a todos los objetos que están en la escena, puesto que todos los objetos deben de tener una transformación para saber dónde hay que dibujarlos. El resto de componentes (que deben ser añadidos manualmente), pueden ser accedidos simplemente con la función \textit{GetComponent<Tipo>()}. De esta forma podemos fácilmente aplicar transformaciones o fuerzas (en el caso de rigidBody) sobre el mismo objeto.
 
 \begin{spacing}{1}
 \begin{lstlisting}[float=htbp, caption={Acceso al componente transform para modificar el propio objeto}, label=lst:local]
@@ -442,12 +440,12 @@ transform.Translate(rotation * direction);
 \end{lstlisting}
 \end{spacing}
 
-En el caso de querer modificar otro objeto, por ejemplo, en el caso de querer crear un enemigo a cierta distancia de otro, simplemente tenemos que encontrar la referencia al objeto. Esto se puede hacer muy fácilmente haciendo una variable pública y asignándola desde el editor. Sin embargo, si queremos acceder al objeto de forma dinámica o únicamente usando \textit{C\#}, se puede hacer de varias formas, todas usando funciones estáticas de la clase \textit{GameObject}:
+En el caso de querer modificar otro objeto, por ejemplo, crear un enemigo a cierta distancia de otro, simplemente tenemos que encontrar la referencia al objeto. Esto se puede hacer muy fácilmente haciendo una variable pública y asignándola desde el editor. Sin embargo, si queremos acceder al objeto de forma dinámica o únicamente usando \textit{C\#}, se puede hacer de varias formas, todas usando funciones estáticas de la clase \textit{GameObject}:
 
 \begin{enumerate}
-\item Por nombre: usando la función \textit{GameObject.Find()}. Se puede buscar de forma directa un objeto en la escena virtual mediante su nombre, simplemente es necesario conocerlo de antemano. Este último matiz puede que sea la mayor inconveniencia, pues es probable que no sepamos de antemano el nombre del objeto, sobre todo si se ha generado dinámicamente. Esta función tratará los caracteres \"\/\" no como parte del nombre, sino como parte de una jerarquía de objetos. La documentación oficial de \textit{Unity} \footnote{\url{https://docs.unity3d.com/ScriptReference/GameObject.html}} \cite{unityreference} desaconseja usar esta función cada frame.
+\item Por nombre: usando la función \textit{GameObject.Find()}. Se puede buscar de forma directa un objeto en la escena virtual mediante su nombre, simplemente es necesario conocerlo de antemano. Este último matiz puede que sea la mayor inconveniencia, pues es probable que no sepamos de antemano el nombre del objeto, sobre todo si se ha generado dinámicamente. Esta función tratará los caracteres ''/'' no como parte del nombre, sino como parte de una jerarquía de objetos. La documentación oficial de \textit{Unity} \footnote{\url{https://docs.unity3d.com/ScriptReference/GameObject.html}} \cite{unityreference} desaconseja usar esta función cada frame.
 \item Por tipo: usando la función \textit{GameObject.FindObjectOfType(Type type)}. En este caso, buscamos por tipo de objeto, teniendo un ejemplo en el listado \ref{lst:tipo}.
- Esta función retorna el \textbf{primer} objeto cargado de el tipo especificado, o \textit{null} si no existe ninguno de dicho tipo. Para conseguir un iterador de todos los objetos de ese tipo, también existe la función \textit{GameObject.FindObjectsOfType(Type type)}. La documentación oficial desaconseja utilizar estas funciones por ser más lentas que el resto.
+ Esta función retorna el \textbf{primer} objeto cargado del tipo especificado, o \textit{null} si no existe ninguno de dicho tipo. Para conseguir un iterador de todos los objetos de ese tipo, también existe la función \textit{GameObject.FindObjectsOfType(Type type)}. La documentación oficial desaconseja utilizar estas funciones por ser más lentas que el resto.
 \item Por etiqueta o \textit{tag}: usando la función \textit{GameObject.FindGameObjectWithTag(String tag)}. Esta función, al igual que la anterior, devuelve el \textbf{primer} objeto cargado con dicha tag, o \textit{null} si no encuentra ninguno. Además, lanzará una excepción si la tag no existe. Esta función es muy fácil de usar, pues \textit{Unity} tiene un sistema nativo de tags para los objetos muy simple de usar, a parte de tener tags predefinidas. El hecho de que sean simples cadenas de caracteres también lo hace más sencillo de utilizar. 
 \end{enumerate}
 
@@ -485,7 +483,7 @@ Para terminar y concretar el trabajo, hemos realizado varios \textit{scripts} se
 
 \begin{enumerate}
 \item Movimiento automático del jugador, para poder desplazarse por el escenario sin pulsar botones.
-\item Aplicación de fueras a un objeto con físicas.
+\item Aplicación de fuerzas a un objeto con físicas.
 \item Reproducción de un vídeo interactuando con un objeto del escenario.
 \end{enumerate}
 
@@ -510,7 +508,7 @@ if (isWalking)
 \end{spacing}
 
 
-El segundo \textit{script} \ref{lst:applyForce} consiste en una función que se ejecutará cuando el jugador interactúe con la figura 3D que se puede ver en la figura \ref{fig:Escena1}. Para ello, encontramos el componente \textit{RigidBody}, que es el que nos dejará aplicar una fuerza en los 3 ejes, iterando sobre todos los componentes del objeto. También buscamos la referencia al jugador mediante la función discutida anteriormente \textit{GameObject.FindGameObjectWithTag("Player")}, usando como tag "Player". Obtenemos el componente \textit{RigidBody} del jugador para poder calcular el vector entre los dos objetos, y aplicamos una fuerza en esa dirección, aunque en el eje Y (el que apunta hacia "arriba") se cambia para que la fuerza sea siempre en sentido ascendente. Este ejemplo muestra muy bien cómo se pueden obtener componentes y otros objetos mediante el uso de un par de funciones.
+El segundo \textit{script} [\ref{lst:applyForce}] consiste en una función que se ejecutará cuando el jugador interactúe con la figura 3D que se puede ver en la figura \ref{fig:Escena1}. Para ello, encontramos el componente \textit{RigidBody}, que es el que nos dejará aplicar una fuerza en los 3 ejes, iterando sobre todos los componentes del objeto. También buscamos la referencia al jugador mediante la función discutida anteriormente \textit{GameObject.FindGameObjectWithTag("Player")}, usando como tag "Player". Obtenemos el componente \textit{RigidBody} del jugador para poder calcular el vector entre los dos objetos, y aplicamos una fuerza en esa dirección, aunque en el eje Y (el que apunta hacia ''arriba'') se cambia para que la fuerza sea siempre en sentido ascendente. Este ejemplo muestra muy bien cómo se pueden obtener componentes y otros objetos mediante el uso de un par de funciones.
 
 \begin{spacing}{1}
 \begin{lstlisting}[float=htbp, caption=Aplicación de una fuerza a un objeto con físicas, label=lst:applyForce]
@@ -547,7 +545,7 @@ foreach (Component component in components)
 \end{lstlisting}
 \end{spacing}
 
-El último \textit{script} consiste en la reproducción y pausa de un vídeo interactuando con otro objeto dentro de la escena. En la figura \ref{fig:Escena2} se pueden ver el objeto con el que hay que interactuar y el plano donde se puede visualizar el vídeo. Este último tiene un componente \textit{VideoPlayer} que es el que se encarga de reproducir el vídeo como si fuera una textura dinámica del plano. En el listado \ref{lst:PlayVideo} se puede ver cómo el proceso es prácticamente el mismo: Encontramos el objeto dentro de la escena y obtenemos el componente deseado. En este ejemplo aparece cómo encontrar un componente en concreto sin necesidad de usar un iterador, símplemente estableciendo el tipo específico de componente en la función \textit{GetComponentInChildren()}. Sin embargo, esto sólo funcionará con los componentes de tipos ya definidos en \textit{Unity} (no con otros \textit{scripts}). 
+El último \textit{script} consiste en la reproducción y pausa de un vídeo interactuando con otro objeto dentro de la escena. En la figura \ref{fig:Escena2} se pueden ver el objeto con el que hay que interactuar y el plano donde se puede visualizar el vídeo. Este último tiene un componente \textit{VideoPlayer} que es el que se encarga de reproducir el vídeo como si fuera una textura dinámica del plano. En el listado \ref{lst:PlayVideo} se puede ver cómo el proceso es prácticamente el mismo: Encontramos el objeto dentro de la escena y obtenemos el componente deseado. En este ejemplo aparece cómo encontrar un componente en concreto sin necesidad de usar un iterador, simplemente estableciendo el tipo específico de componente en la función \textit{GetComponentInChildren()}. Sin embargo, esto sólo funcionará con los componentes de tipos ya definidos en \textit{Unity} (no con otros \textit{scripts}). 
 
 \begin{figure}[htb]
 	\centering
@@ -581,12 +579,12 @@ La conclusión de este estudio es que Unity es muy flexible tanto en la interacc
 
 Algunas de las facilidades que Unity provee para la interacción es la inclusión por defecto de los eventos más usados en el desarrollo de juegos.
 
-Respecto a las facilidades con los elementos multimedia destaca el amplio soporte a formatos tanto de audio como de video y la manera unificada de controlar estos aspectos, sin que sea necesario tener en cuenta el formato del elemento.
+Respecto a las facilidades con los elementos multimedia destaca el amplio soporte a formatos tanto de audio como de vídeo y la manera unificada de controlar estos aspectos, sin que sea necesario tener en cuenta el formato del elemento.
 
 \clearpage
 
-%\phantomsection  % OJO: Ojo necesario con hyperref.
-\addcontentsline{toc}{chapter}{\refname} % Añade la bibliografía al Índice de contenidos.
+\phantomsection  % OJO: Ojo necesario con hyperref.
+\addcontentsline{toc}{chapter}{Referencias} % Añade la bibliografía al Índice de contenidos.
 %---
 % Opción 1: Bibliografía con todas las fuentes en un apartado.
 %---
